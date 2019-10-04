@@ -127,7 +127,7 @@ try
     numRight = 0;
 
     for ii = 1:size(q_stu,1)
-        isSol = vecnorm(q_sol - q_stu(ii,:),2,2) <= tolerances.errTolPos;
+        isSol = vecnorm(wrapToPi(q_sol - q_stu(ii,:)),2,2) <= tolerances.errTolPos;
 
         if ~isempty(find(isSol,1))
             numRight = numRight + 1;

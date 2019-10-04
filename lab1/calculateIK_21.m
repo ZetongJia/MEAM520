@@ -26,18 +26,21 @@ function [q isPos] = calculateIK_pennkey(T0e)
     d2 = 146.05;
     d3 = 187.325;
     d5 = 85.725-9.525;
+    d6 = 104.775;
 
-    X = T0e(1,4);
-    Y = T0e(2,4);
-    Z = T0e(3,4);
-    r1 = -sqrt(X^2+Y^2);
+    X = T0e(1,4) - d6*T0e(1,3);
+    Y = T0e(2,4) - d6*T0e(2,3);
+    Z = T0e(3,4) - d6*T0e(3,3);
+    r1 = sqrt(X^2+Y^2);
     r2 = d1-Z;
-    r3 = -sqrt(r1^2+r2^2);
+    r3 = sqrt(r1^2+r2^2);
+    phi1 = acos((d3^2-d2^2-r3^2)/(-2*d2*r3));
+    phi2 = atan2(r2, r1);
+    phi3 = acos((r3^2-d2^2-d3^2)/(-2*d2*d3));
+    
     theta1 = atan2(Y,X);
-    disp(X);
-    disp(Y);
-    theta2 = acos((d3^2-d2^2-r3^2)/(-2d2*r3));
-    theta3 = acos((r3^2-d2^2-d3^2)/(-2d2*d3));
+    theta2 = pi/2 + (phi2 - phi1);
+    theta3 = pi - phi3 - pi/2;
 
 
     a1 = [cos(theta1) 0 -sin(theta1) 0; sin(theta1) 0 cos(theta1) 0; 0 -1 0 d1; 0 0 0 1];
@@ -46,10 +49,10 @@ function [q isPos] = calculateIK_pennkey(T0e)
 
     T03 = a1*a2*a3;
     R03 = T03(1:3,1:3);
-    R45 = R03'*T0e(1:3,1:3);
+    R46 = R03'*T0e(1:3,1:3);
 
-    theta5 = -acos(R45(3,2));
-    theta4 = asin(R45(2,3));
+    theta5 = -acos(R46(3,2));
+    theta4 = asin(R46(2,3));
 %     q = [0, 0, 0, 0, 0];
     q = [theta1, theta2, theta3, theta4, theta5];
     isPos = 1;
