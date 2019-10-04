@@ -51,7 +51,7 @@ function [q isPos] = calculateIK_pennkey(T0e)
     R03 = T03(1:3,1:3);
     R46 = R03'*T0e(1:3,1:3);
 
-    theta5 = -acos(R46(3,2));
+    theta5 = acos(-R46(3,2));
     theta4 = asin(R46(2,3));
 %     q = [0, 0, 0, 0, 0];
     q = [theta1, theta2, theta3, theta4, theta5];
