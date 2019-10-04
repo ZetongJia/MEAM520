@@ -55,13 +55,9 @@ function [q isPos] = calculateIK_pennkey(T0e)
     theta4 = asin(R46(2,3));
     q = [theta1, theta2, theta3, theta4, theta5];
     
-    if(isreal(q))
-        lowerLimit = [-1.4, -1.2, -1.8, -1.9, -2];
-        upperLimit = [1.4, 1.4, 1.7, 1.7, 1.5];
-        isPos = all(q >= lowerLimit & q <= upperLimit);
-    else
-        q = [];
-        isPos = 0;
-    end
+    if(isReal(
+    lowerLimit = [-1.4, -1.2, -1.8, -1.9, -2];
+    upperLimit = [1.4, 1.4, 1.7, 1.7, 1.5];
+    isPos = all( q >= lowerLimit & q <= upperLimit );
 
 end
