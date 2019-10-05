@@ -28,6 +28,19 @@ function [q isPos] = calculateIK_pennkey(T0e)
     d5 = 85.725-9.525;
     d6 = 104.775;
 
+    alpha1 = atan2(T0e(2,4),T0e(1,4));
+    yc = T0e(2,4) - 28.575*T0e(2,3);
+    xc = T0e(1,4) - 28.575*T0e(1,3);
+    alpha2 = atan2(yc,xc);    
+    alpha3 = alpha2-alpha1;
+    feasible = true;
+    if (alpha3 > 10^(-4))
+        projection = [1, 0, 0, 0; 0, cos(alpha3), -sin(alpha3), 0; ...
+            0, sin(alpha3), cos(alpha3), 0; 0, 0, 0, 1];
+        T0e = T0e * projection;
+        feasible = false;
+    end
+    
     X = T0e(1,4) - d6*T0e(1,3);
     Y = T0e(2,4) - d6*T0e(2,3);
     Z = T0e(3,4) - d6*T0e(3,3);
@@ -88,6 +101,9 @@ function [q isPos] = calculateIK_pennkey(T0e)
         isPos = 0;
     end
     % add feasibility
+    if (feasible == false)
+        isPos = 0;
+    end   
     
     q = []
     for row=1:size(q_isPos,1)
