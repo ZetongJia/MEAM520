@@ -29,8 +29,8 @@ function [q isPos] = calculateIK_pennkey(T0e)
     d6 = 104.775;
 
     alpha1 = atan2(T0e(2,4),T0e(1,4));
-    yc = T0e(2,4) - 28.575*T0e(2,3);
-    xc = T0e(1,4) - 28.575*T0e(1,3);
+    yc = T0e(2,4) - 104.775*T0e(2,3);
+    xc = T0e(1,4) - 104.7752*T0e(1,3);
     alpha2 = atan2(yc,xc);    
     alpha3 = alpha2-alpha1;
     feasible = true;
