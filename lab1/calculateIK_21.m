@@ -88,8 +88,8 @@ function [q isPos] = calculateIK_pennkey(T0e)
     R03_2 = T03_2(1:3,1:3);
     R46_2 = R03_2'*T0e(1:3,1:3);
 
-    theta5_2 = acos(-R46_2(3,2))
-    theta4_2 = asin(R46_2(2,3))
+    theta5_2 = acos(-R46_2(3,2));
+    theta4_2 = asin(R46_2(2,3));
     q_2 = [theta1_2, theta2_2, theta3_2, theta4_2, theta5_2];
     
     q_isPos = [];
