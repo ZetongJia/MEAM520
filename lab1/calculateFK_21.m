@@ -35,6 +35,7 @@ function [jointPositions,T0e] = calculateFK_21(q)
     a3 = [-sin(theta3) -cos(theta3) 0 -d3*sin(theta3); cos(theta3) -sin(theta3) 0 d3*cos(theta3); 0 0 1 0; 0 0 0 1];
     a4 = [sin(theta4) 0 cos(theta4) 0; -cos(theta4) 0 sin(theta4) 0; 0 -1 0 0; 0 0 0 1];
     a5 = [cos(theta5) -sin(theta5) 0 0; sin(theta5) cos(theta5) 0 0; 0 0 1 d5; 0 0 0 1];
+    a6 = [1 0 0 0; 0 1 0 0; 0 0 1 28.575; 0 0 0 1];
     
     jointPositions = zeros(6, 3);
     jp2 = a1*[0;0;0;1];
@@ -51,7 +52,6 @@ function [jointPositions,T0e] = calculateFK_21(q)
     jointPositions(6, 1) = jointPositions(6, 1);
     
     T0e = zeros(4, 4);
-    a6 = [1 0 0 0; 0 1 0 0; 0 0 1 28.575; 0 0 0 1];
     T0e = a1*a2*a3*a4*a5*a6;
     
 end
