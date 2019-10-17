@@ -28,6 +28,8 @@ for ii=1:size(path,1)-1
     
     for jj = 1:size(morePath,1)
         lynxServo(morePath(jj,1),morePath(jj,2),morePath(jj,3),0,0,0);
+        [~,T] = calculateFK_sol(morePath(jj,:));
+        plot3(T(1,4),T(2,4),T(3,4),'k.');
         pause(totalT/n/size(path,1))
     end
 
