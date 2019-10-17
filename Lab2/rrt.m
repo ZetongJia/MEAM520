@@ -48,7 +48,7 @@ for i = 1:numIter
     
     % discretize these two paths and check if points along path collide
     isStartPathCollided = isPathCollided(qSample, startNodes(qClosestStart), map, robot, numSteps);
-    isgoalPathCollided = isPathCollided(qSample, goalNodes(qClosestgoal), map, robot, numSteps);
+    isGoalPathCollided = isPathCollided(qSample, goalNodes(qClosestgoal), map, robot, numSteps);
     
     % add nodes to tree if not collided
     nodeIndex = int2str(i);
@@ -57,12 +57,12 @@ for i = 1:numIter
         startNodes(nodeIndex) = qSample;
         startGraph = addedge(startGraph, qClosestStart, nodeIndex);
     end
-    if ~isgoalPathCollided
+    if ~isGoalPathCollided
         goalGraph = goalGraph.addnode(nodeIndex);
         goalNodes(nodeIndex) = qSample;
         goalGraph = addedge(goalGraph, qClosestgoal, nodeIndex);
     end 
-    if ~isStartPathCollided && ~isgoalPathCollided
+    if ~isStartPathCollided && ~isGoalPathCollided
     	found = true;
         connectionPoint = nodeIndex;
         break;
