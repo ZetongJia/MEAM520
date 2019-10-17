@@ -68,15 +68,13 @@ if found
         startPath = [startNodes(i).q start(5) start(6); startPath];
         i = startNodes(i).lastNode;
     end
-    startPath = [start; startPath];
     goalPath = [];
     i = connectionPoint;
     while ~strcmp(i, 'goal')
         goalPath = [goalPath; goalNodes(i).q goal(5) goal(6)];
         i = goalNodes(i).lastNode;
     end
-    goalPath = [goalPath; goal];
-    path = [startPath(1:size(startPath, 1) - 1, :); goalPath]
+    path = [start; startPath(1:size(startPath, 1) - 1, :); goalPath; goal]
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
