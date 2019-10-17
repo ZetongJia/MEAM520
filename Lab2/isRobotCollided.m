@@ -11,12 +11,24 @@ function [isCollided] = isRobotCollided(q, map, robot)
 %   isCollided - a boolean flag: 1 if the robot is in collision, 0 if not.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                  Algortihm Starts Here             %%%
+%%%                  Algorithm Starts Here             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
+[jointPositions,T0e] = calculateFK_sol([q 0 0]);
+
+isCollided = false;
+
+for obstacle = 1:size(map.obstacles,1)
+    for joint = 1:3
+        for corner = 1:4
+            % TODO: add four corners
+            isCollided = isCollided || detectCollision(jointPositions(joint, :), jointPositions(joint+1, :), map.obstacles(obstacle, :));
+        end
+    end
+end
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                  Algortihm Ends Here               %%%
+%%%                  Algorithm Ends Here               %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 end

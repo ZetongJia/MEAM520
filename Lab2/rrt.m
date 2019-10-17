@@ -13,65 +13,85 @@ function [path] = rrt(map, start, goal)
 
 %% Prep Code
 
-path = [];
+path = [0 0 0 0 0 0];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                  Algortihm Starts Here             %%%
+%%%                  Algorithm Starts Here             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nodeMap_start = containers.Map;
-nodeMap_end = containers.Map;
-robot = load('~/Users/tina_jia/Desktop/MEAM520/Lab2/robot.mat');
-T_start = digraph;
-T_end = digraph;
-T_start = T_start.addnode('q_start');
-nodeMap_start('q_start') = start;
-T_end = T_end.addnode('q_end');
-nodeMap_end('q_end') = goal;
 
-isCollided = true;
+% constants
+robot = load('robot.mat');
+numIter = 100;
+numSteps = 10;
+
+% initialize variables
+startNodes = containers.Map;
+endNodes = containers.Map;
+startGraph = digraph;
+endGraph = digraph;
+
+startGraph = startGraph.addnode('q_start');
+endGraph = endGraph.addnode('q_end');
+startNodes('q_start') = start(1:4);
+endNodes('q_end') = goal(1:4);
+
 found = false;
-connection_point = 0;
-for i = 1:100
+connectionPoint = 0;
+for i = 1:numIter
+    isCollided = true;
     while isCollided
-            one_rand = robot.lowerLim(1)+rand*(robot.lowerLim(1)-robot.upperLim(1));
-            two_rand = robot.lowerLim(2)+rand*(robot.lowerLim(1)-robot.upperLim(2));
-            three_rand = robot.lowerLim(3)+rand*(robot.lowerLim(1)-robot.upperLim(3));
-            four_rand = robot.lowerLim(4)+rand*(robot.lowerLim(1)-robot.upperLim(4));
-            q_sample = [one_rand, two_rand, three_rand, four_rand];
-            isCollided = isRobotCollided(q_sample, map, robot);
+        qSample = random('uniform', robot.robot.lowerLim(1:4), robot.robot.upperLim(1:4));
+        isCollided = isRobotCollided(qSample, map, robot);
     end
-    %find closest point in start and goal trees
-    [q_closest_start_name] = findClosestPoint(q_sample, nodeMap_start);
-    [q_closest_end_name] = findClosestPoint(q_sample, nodeMap_end);
-    %discretize these two paths & check sample_start_collide & sample_end_collide
-    sample_start_collide = check_path_collide(q_sample, nodeMap_start(q_closest_start_name), map, robot);
-    sample_end_collide = check_path_collide(q_sample, nodeMap_end(q_closest_end), map, robot);
-    %add to tree if not 
-
-    if ~sample_start_collide
-        T_start = T_start.addnode(i);
-        T_start = addedge(T_start, q_closest_start_name, i);
+    
+    % find closest point in start and goal trees
+    [qClosestStart] = findClosestPoint(qSample, startNodes);
+    [qClosestEnd] = findClosestPoint(qSample, endNodes);
+    
+    % discretize these two paths and check if points along path collide
+    isStartPathCollided = isPathCollided(qSample, startNodes(qClosestStart), map, robot, numSteps);
+    isEndPathCollided = isPathCollided(qSample, endNodes(qClosestEnd), map, robot, numSteps);
+    
+    % add nodes to tree if not collided
+    nodeIndex = int2str(i);
+    if ~isStartPathCollided
+        startGraph = startGraph.addnode(nodeIndex);
+        startNodes(nodeIndex) = qSample;
+        startGraph = addedge(startGraph, qClosestStart, nodeIndex);
     end
-    if ~sample_end_collide
-        T_end = T_end.addnode(i);
-        T_end = addedge(T_end, q_closest_end_name, i);
+    if ~isEndPathCollided
+        endGraph = endGraph.addnode(nodeIndex);
+        endNodes(nodeIndex) = qSample;
+        endGraph = addedge(endGraph, qClosestEnd, nodeIndex);
     end 
-    if ~sample_start_collide && ~sample_end_collide
+    if ~isStartPathCollided && ~isEndPathCollided
     	found = true;
-        connection_point = i;
+        connectionPoint = nodeIndex;
         break;
     end
 end 
 
-%find shortest path in the graph
+% find shortest path in the graph
 if found
-    p_start = shortestpath(T_start,'q_start',connection_point);
-    p_end = shortestpath(T_end,'q_end',connection_point);
-    path = [p_start, flip(p_end)];
+    p_start = shortestpath(startGraph,'q_start',connectionPoint)
+    p_end = shortestpath(endGraph,'q_end',connectionPoint);
+    p_end = flip(p_end)
+    % path = [p_start(1:size(p_start,2)-1), flip(p_end)];
+    
+    startTreeSize = size(p_start, 2)
+    endTreeSize = size(p_end, 2)
+    sol = zeros(startTreeSize + endTreeSize - 1, 6);
+    for i = 1: startTreeSize - 1
+        sol(i, :) = [startNodes(p_start{i}) 0 0];
+    end
+    for i = startTreeSize: endTreeSize
+        sol(i, :) = [endNodes(p_end{i - startTreeSize + 1}) 0 0];
+    end
+    sol
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                  Algortihm Ends Here               %%%
+%%%                  Algorithm Ends Here               %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

@@ -22,15 +22,15 @@ map = loadmap('example_map.txt');
 %% Run the simulation
 
 % Solve the path problem using A*
-[path, num] = astar();
+% [path, num] = astar();
 
 % OR Solve the path problem using RRT
-%[path] = rrt();
+[path] = rrt(map, start, goal);
 
-profile off
+% profile off
 
 %% Plot the output
 
-plotLynxPath(map,path,10);
+% plotLynxPath(map,path,10);
 
-profile viewer
+% profile viewer
