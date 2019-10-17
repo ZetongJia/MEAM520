@@ -69,8 +69,8 @@ for i = 1:numIter
     end
 end 
 
-% find shortest path in the graph
 if found
+    % find shortest path in the graph
     startPath = shortestpath(startGraph,'start',connectionPoint);
     goalPath = shortestpath(goalGraph,'goal',connectionPoint);
     goalPath = flip(goalPath);
