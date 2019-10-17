@@ -24,14 +24,14 @@ numSteps = 10;
 
 % initialize variables
 startNodes = containers.Map;
-endNodes = containers.Map;
+goalNodes = containers.Map;
 startGraph = digraph;
-endGraph = digraph;
+goalGraph = digraph;
 
-startGraph = startGraph.addnode('q_start');
-endGraph = endGraph.addnode('q_end');
-startNodes('q_start') = start(1:4);
-endNodes('q_end') = goal(1:4);
+startGraph = startGraph.addnode('start');
+goalGraph = goalGraph.addnode('goal');
+startNodes('start') = start(1:4);
+goalNodes('goal') = goal(1:4);
 
 found = false;
 connectionPoint = 0;
@@ -44,11 +44,11 @@ for i = 1:numIter
     
     % find closest point in start and goal trees
     [qClosestStart] = findClosestPoint(qSample, startNodes);
-    [qClosestEnd] = findClosestPoint(qSample, endNodes);
+    [qClosestgoal] = findClosestPoint(qSample, goalNodes);
     
     % discretize these two paths and check if points along path collide
     isStartPathCollided = isPathCollided(qSample, startNodes(qClosestStart), map, robot, numSteps);
-    isEndPathCollided = isPathCollided(qSample, endNodes(qClosestEnd), map, robot, numSteps);
+    isgoalPathCollided = isPathCollided(qSample, goalNodes(qClosestgoal), map, robot, numSteps);
     
     % add nodes to tree if not collided
     nodeIndex = int2str(i);
@@ -57,12 +57,12 @@ for i = 1:numIter
         startNodes(nodeIndex) = qSample;
         startGraph = addedge(startGraph, qClosestStart, nodeIndex);
     end
-    if ~isEndPathCollided
-        endGraph = endGraph.addnode(nodeIndex);
-        endNodes(nodeIndex) = qSample;
-        endGraph = addedge(endGraph, qClosestEnd, nodeIndex);
+    if ~isgoalPathCollided
+        goalGraph = goalGraph.addnode(nodeIndex);
+        goalNodes(nodeIndex) = qSample;
+        goalGraph = addedge(goalGraph, qClosestgoal, nodeIndex);
     end 
-    if ~isStartPathCollided && ~isEndPathCollided
+    if ~isStartPathCollided && ~isgoalPathCollided
     	found = true;
         connectionPoint = nodeIndex;
         break;
@@ -71,24 +71,24 @@ end
 
 % find shortest path in the graph
 if found
-    startPath = shortestpath(startGraph,'q_start',connectionPoint);
-    endPath = shortestpath(endGraph,'q_end',connectionPoint);
-    endPath = flip(endPath);
+    startPath = shortestpath(startGraph,'start',connectionPoint);
+    goalPath = shortestpath(goalGraph,'goal',connectionPoint);
+    goalPath = flip(goalPath);
     
     % create path matrix
     startTreeSize = size(startPath, 2);
-    endTreeSize = size(endPath, 2);
-    path = zeros(startTreeSize + endTreeSize - 1, 6);
+    goalTreeSize = size(goalPath, 2);
+    path = zeros(startTreeSize + goalTreeSize - 1, 6);
     for i = 1: startTreeSize - 1
         path(i, :) = [startNodes(startPath{i}) start(5) start(6)];
     end
-    for i = startTreeSize: startTreeSize + endTreeSize - 1
-        path(i, :) = [endNodes(endPath{i - startTreeSize + 1}) goal(5) goal(6)];
+    for i = startTreeSize: startTreeSize + goalTreeSize - 1
+        path(i, :) = [goalNodes(goalPath{i - startTreeSize + 1}) goal(5) goal(6)];
     end
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                  Algorithm Ends Here               %%%
+%%%                  Algorithm goals Here               %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
