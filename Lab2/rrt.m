@@ -71,21 +71,20 @@ end
 
 % find shortest path in the graph
 if found
-    p_start = shortestpath(startGraph,'q_start',connectionPoint)
-    p_end = shortestpath(endGraph,'q_end',connectionPoint);
-    p_end = flip(p_end)
-    % path = [p_start(1:size(p_start,2)-1), flip(p_end)];
+    startPath = shortestpath(startGraph,'q_start',connectionPoint);
+    endPath = shortestpath(endGraph,'q_end',connectionPoint);
+    endPath = flip(endPath);
     
-    startTreeSize = size(p_start, 2)
-    endTreeSize = size(p_end, 2)
+    % create path matrix
+    startTreeSize = size(startPath, 2);
+    endTreeSize = size(endPath, 2);
     path = zeros(startTreeSize + endTreeSize - 1, 6);
     for i = 1: startTreeSize - 1
-        path(i, :) = [startNodes(p_start{i}) 0 0];
+        path(i, :) = [startNodes(startPath{i}) start(5) start(6)];
     end
-    for i = startTreeSize: endTreeSize
-        path(i, :) = [endNodes(p_end{i - startTreeSize + 1}) 0 0];
+    for i = startTreeSize: startTreeSize + endTreeSize - 1
+        path(i, :) = [endNodes(endPath{i - startTreeSize + 1}) goal(5) goal(6)];
     end
-    path
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

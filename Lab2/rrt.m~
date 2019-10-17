@@ -13,8 +13,6 @@ function [path] = rrt(map, start, goal)
 
 %% Prep Code
 
-path = [0 0 0 0 0 0];
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                  Algorithm Starts Here             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -80,14 +78,16 @@ if found
     
     startTreeSize = size(p_start, 2)
     endTreeSize = size(p_end, 2)
-    sol = zeros(startTreeSize + endTreeSize - 1, 6);
+    path = zeros(startTreeSize + endTreeSize - 1, 6);
     for i = 1: startTreeSize - 1
-        sol(i, :) = [startNodes(p_start{i}) 0 0];
+        path(i, :) = [startNodes(p_start{i}) start(5)];
     end
-    for i = startTreeSize: endTreeSize
-        sol(i, :) = [endNodes(p_end{i - startTreeSize + 1}) 0 0];
+    for i = startTreeSize: startTreeSize + endTreeSize - 1
+        path(i, :) = [endNodes(p_end{i - startTreeSize + 1}) 0 0];
+        p_end{i - startTreeSize + 1}
     end
-    sol
+    endNodes('q_end')
+    path
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
