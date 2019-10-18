@@ -16,7 +16,7 @@ load 'robot.mat' robot
 start = [0,0,0,0,0,0];
 goal = [1.4,0,0,0,0,0];
 
-map = loadmap('example_map.txt');
+map = loadmap('map4.txt');
 
 
 %% Run the simulation
@@ -33,4 +33,4 @@ profile off
 
 plotLynxPath(map,path,10);
 
-% profile viewer
+ profile viewer
