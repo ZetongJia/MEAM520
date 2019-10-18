@@ -14,6 +14,11 @@ function [isCollided] = isRobotCollided(q, map, robot)
 %%%                  Algorithm Starts Here             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% calculate FK to get joint positions
+[jointPositions,T0e] = calculateFK_sol([q 0 0]);
+jointPositions = [jointPositions(1:4, :); T0e(1:3, 4)'];
+
+% calculate FK to get intermediate rotation matrices 
 theta1 = q(1);
 theta2 = q(2);
 theta3 = q(3);
@@ -25,16 +30,13 @@ a3 = [-sin(theta3) -cos(theta3) 0 -robot.robot.a3*sin(theta3); cos(theta3) -sin(
 a4 = [sin(theta4) 0 cos(theta4) 0; -cos(theta4) 0 sin(theta4) 0; 0 -1 0 0; 0 0 0 1];
 a5 = [cos(theta5) -sin(theta5) 0 0; sin(theta5) cos(theta5) 0 0; 0 0 1 robot.robot.d5+28.575; 0 0 0 1];
 
-[jointPositions,T0e] = calculateFK_sol([q 0 0]);
-jointPositions = [jointPositions(1:4, :); T0e(1:3, 4)'];
-jointSizes = 25.4 .* [3.5 3 2 3;3.5 1 1 3.5]; % [link12 link23 link34 link4end] width and height in mm
-
 isCollided = false;
 for obstacle = 1:size(map.obstacles,1)
     for joint = 1:4
-        jointPositions(joint, :)
+        % check if link 
     	isCollided = isCollided || detectCollision(jointPositions(joint, :), jointPositions(joint+1, :), map.obstacles(obstacle, :));
-        %giving link 23, 34, 456 volume to avoid collision
+        
+        % giving link 23, 34, 456 volume to avoid collision
         if(joint == 2)
             a = a1*a2*([0.5;0;1.5;1]*25.4);
             b = a1*a2*([0.5;0;-1.5;1]*25.4);

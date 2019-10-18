@@ -73,7 +73,7 @@ if found
         goalPath = [goalPath; goalNodes(i).q goal(5) goal(6)];
         i = goalNodes(i).lastNode;
     end
-    path = [start; startPath(1:size(startPath, 1) - 1, :); goalPath; goal]
+    path = [start; startPath(1:size(startPath, 1) - 1, :); goalPath; goal];
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                  Algorithm Ends Here               %%%
