@@ -23,7 +23,7 @@ a1 = [cos(theta1) 0 -sin(theta1) 0; sin(theta1) 0 cos(theta1) 0; 0 -1 0 robot.ro
 a2 = [sin(theta2) cos(theta2) 0 robot.robot.a2*sin(theta2); -cos(theta2) sin(theta2) 0 -robot.robot.a2*cos(theta2); 0 0 1 0; 0 0 0 1];
 a3 = [-sin(theta3) -cos(theta3) 0 -robot.robot.a3*sin(theta3); cos(theta3) -sin(theta3) 0 robot.robot.a3*cos(theta3); 0 0 1 0; 0 0 0 1];
 a4 = [sin(theta4) 0 cos(theta4) 0; -cos(theta4) 0 sin(theta4) 0; 0 -1 0 0; 0 0 0 1];
-a5 = [cos(theta5) -sin(theta5) 0 0; sin(theta5) cos(theta5) 0 0; 0 0 1 robot.robot.d5; 0 0 0 1];
+a5 = [cos(theta5) -sin(theta5) 0 0; sin(theta5) cos(theta5) 0 0; 0 0 1 robot.robot.d5+28.575; 0 0 0 1];
 
 [jointPositions,T0e] = calculateFK_sol([q 0 0]);
 jointPositions = [jointPositions(1:4, :); T0e(1:3, 4)'];
@@ -32,6 +32,7 @@ jointSizes = 25.4 .* [3.5 3 2 3;3.5 1 1 3.5]; % [link12 link23 link34 link4end] 
 isCollided = false;
 for obstacle = 1:size(map.obstacles,1)
     for joint = 1:4
+        jointPositions(joint, :)
     	isCollided = isCollided || detectCollision(jointPositions(joint, :), jointPositions(joint+1, :), map.obstacles(obstacle, :));
         if(joint == 2)
             a = a1*a2*([0.5;0;1.5;1]*25.4);
