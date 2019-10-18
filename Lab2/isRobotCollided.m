@@ -34,6 +34,7 @@ for obstacle = 1:size(map.obstacles,1)
     for joint = 1:4
         jointPositions(joint, :)
     	isCollided = isCollided || detectCollision(jointPositions(joint, :), jointPositions(joint+1, :), map.obstacles(obstacle, :));
+        %giving link 23, 34, 456 volume to avoid collision
         if(joint == 2)
             a = a1*a2*([0.5;0;1.5;1]*25.4);
             b = a1*a2*([0.5;0;-1.5;1]*25.4);

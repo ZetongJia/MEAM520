@@ -20,7 +20,7 @@ function [path] = rrt(map, start, goal)
 robot = load('robot.mat');
 numIter = 100;
 numSteps = 10;
-
+path=[];
 % initialize variables
 startNodes = containers.Map;
 goalNodes = containers.Map;

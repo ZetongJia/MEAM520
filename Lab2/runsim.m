@@ -16,7 +16,7 @@ load 'robot.mat' robot
 start = [0,0,0,0,0,0];
 goal = [1.4,0,0,0,0,0];
 
-map = loadmap('map2.txt');
+map = loadmap('map1.txt');
 
 
 %% Run the simulation
