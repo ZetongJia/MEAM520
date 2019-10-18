@@ -33,36 +33,51 @@ isCollided = false;
 for obstacle = 1:size(map.obstacles,1)
     for joint = 1:4
     	isCollided = isCollided || detectCollision(jointPositions(joint, :), jointPositions(joint+1, :), map.obstacles(obstacle, :));
-%         if(joint == 2)
-%             a = a1*a2*([0.5;0;1.5;1]*25.4);
-%             b = a1*a2*([0.5;0;-1.5;1]*25.4);
-%             c = a1*a2*([-0.5;0;-1.5;1]*25.4);
-%             d = a1*a2*([-0.5;0;1.5;1]*25.4);
-%             
-%             aa = a1*a2*a3*([0;0.5;1.5;1]*25.4);
-%             bb = a1*a2*a3*([0;0.5;-1.5;1]*25.4);
-%             cc = a1*a2*a3*([0;-0.5;-1.5;1]*25.4);
-%             dd = a1*a2*a3*([0;-0.5;1.5;1]*25.4);
-%             isCollided = isCollided || detectCollision(detectCollision(a(1:3), aa(1:3), map.obstacles(obstacle, :)), aa(1:3), map.obstacles(obstacle, :));
-%             isCollided = isCollided || detectCollision(b(1:3), bb(1:3), map.obstacles(obstacle, :));
-%             isCollided = isCollided || detectCollision(c(1:3), cc(1:3), map.obstacles(obstacle, :));
-%             isCollided = isCollided || detectCollision(d(1:3), dd(1:3), map.obstacles(obstacle, :));
-%         end 
-%         if(joint == 3)
-%             a = a1*a2*a3*([0.5;0;-1;1]*25.4);
-%             b = a1*a2*a3*([-0.5;0;-1;1]*25.4);
-%             c = a1*a2*a3*([0.5;0;1;1]*25.4);
-%             d = a1*a2*a3*([-0.5;0;1;1]*25.4);
-%             
-%             aa = a1*a2*a3*a4*a5*([0.5;1;0;1]*25.4);
-%             bb = a1*a2*a3*a4*a5*([-0.5;1;0;1]*25.4);
-%             cc = a1*a2*a3*a4*a5*([0.5;-1;0;1]*25.4);
-%             dd = a1*a2*a3*a4*a5*([0.5;-1;0;1]*25.4);
-%             isCollided = isCollided || detectCollision(a(1:3), aa(1:3), map.obstacles(obstacle, :));
-%             isCollided = isCollided || detectCollision(b(1:3), bb(1:3), map.obstacles(obstacle, :));
-%             isCollided = isCollided || detectCollision(c(1:3), cc(1:3), map.obstacles(obstacle, :));
-%             isCollided = isCollided || detectCollision(d(1:3), dd(1:3), map.obstacles(obstacle, :));
-%         end
+        if(joint == 2)
+            a = a1*a2*([0.5;0;1.5;1]*25.4);
+            b = a1*a2*([0.5;0;-1.5;1]*25.4);
+            c = a1*a2*([-0.5;0;-1.5;1]*25.4);
+            d = a1*a2*([-0.5;0;1.5;1]*25.4);
+            
+            aa = a1*a2*a3*([0;0.5;1.5;1]*25.4);
+            bb = a1*a2*a3*([0;0.5;-1.5;1]*25.4);
+            cc = a1*a2*a3*([0;-0.5;-1.5;1]*25.4);
+            dd = a1*a2*a3*([0;-0.5;1.5;1]*25.4);
+            isCollided = isCollided || detectCollision(a(1:3).', aa(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(b(1:3).', bb(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(c(1:3).', cc(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(d(1:3).', dd(1:3).', map.obstacles(obstacle, :));
+        end 
+        if(joint == 3)
+            a = a1*a2*a3*([0.5;0;-1;1]*25.4);
+            b = a1*a2*a3*([-0.5;0;-1;1]*25.4);
+            c = a1*a2*a3*([0.5;0;1;1]*25.4);
+            d = a1*a2*a3*([-0.5;0;1;1]*25.4);
+            
+            aa = a1*a2*a3*a4*([0.5;1;0;1]*25.4);
+            bb = a1*a2*a3*a4*([-0.5;1;0;1]*25.4);
+            cc = a1*a2*a3*a4*([0.5;-1;0;1]*25.4);
+            dd = a1*a2*a3*a4*([0.5;-1;0;1]*25.4);
+            isCollided = isCollided || detectCollision(a(1:3).', aa(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(b(1:3).', bb(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(c(1:3).', cc(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(d(1:3).', dd(1:3).', map.obstacles(obstacle, :));
+        end
+        if(joint == 4)       
+            a = a1*a2*a3*a4*([1;1;0;1]*25.4);
+            b = a1*a2*a3*a4*([-1;1;0;1]*25.4);
+            c = a1*a2*a3*a4*([1;-1;0;1]*25.4);
+            d = a1*a2*a3*a4*([1;-1;0;1]*25.4);
+            
+            aa = a1*a2*a3*a4*a5*([1;1;0;1]*25.4);
+            bb = a1*a2*a3*a4*a5*([-1;1;0;1]*25.4);
+            cc = a1*a2*a3*a4*a5*([1;-1;0;1]*25.4);
+            dd = a1*a2*a3*a4*a5*([1;-1;0;1]*25.4);
+            isCollided = isCollided || detectCollision(a(1:3).', aa(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(b(1:3).', bb(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(c(1:3).', cc(1:3).', map.obstacles(obstacle, :));
+            isCollided = isCollided || detectCollision(d(1:3).', dd(1:3).', map.obstacles(obstacle, :));
+        end
     end
 end
     
