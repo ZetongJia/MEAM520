@@ -29,13 +29,14 @@ function [qNext, isDone] = potentialFieldStep_groupno(qCurr, map, robot)
 % qNext(1) = qNext(1)+.01;
 % isDone = 0;
 
+% conic to parabolic? 
 zeta = [0,0,0,0,0,0,0.01];
 rConToPar = 30;
 alpha = 0.05;
 rho0 = 200;
 eta = [0,1000,1000,1000,1000,1000,1000];
 tolToGoal = 5;
-
+qNext = [0,0,0,0,0,0];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                  Algorithm Starts Here             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,7 +50,7 @@ for i = 1:7
     tauSum = [0;0;0;0;0;0];
     J = calcJacobian_5(qCurr, i, robot);
     F = [0,0,0,0,0,0];
-    %what is F(4:6) 
+    %what is F(4:6) -- can be set to 0, not related to potential field
     F(1:3) = Fa(i,:);
     tau = forceToTorque_groupno(F, J);
     tauSum = tauSum+tau;
@@ -67,9 +68,9 @@ for i = 1:7
         tau2 = forceToTorque_groupno(Fr, J);
         tauSum = tauSum+tau2;
     end 
-    
-    
+    qNext(i) = qNext(i) + alpha * tauSum/norm(tauSum);
 end 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                  Algorithm Ends Here               %%%
