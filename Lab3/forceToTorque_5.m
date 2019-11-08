@@ -1,8 +1,8 @@
-function tau = forceToTorque_groupno(F, J)
-% FORCETOTORQUE_GROUPNO Calculate the joint torques required to exert a 
+function tau = forceToTorque_5(F, J)
+% FORCETOTORQUE_5 Calculate the joint torques required to exert a 
 %   specific set of end-effector forces/torques in a given configuration.
 %   Note that you can write this function entirely generally, with no
-%   reference to the Lynx. CHANGE GROUPNO TO YOUR GROUP NUMBER.
+%   reference to the Lynx.
 %
 % INPUTS:
 %   F - 1 x 6 vector of desired forces/torques (where F(1:3) is the
@@ -18,8 +18,7 @@ function tau = forceToTorque_groupno(F, J)
 %%%                  Your Code Starts Here             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
+tau = J'*F'
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                  Your Code Ends Here               %%%
