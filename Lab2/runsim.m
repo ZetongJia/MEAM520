@@ -22,7 +22,7 @@ map = loadmap('map1.txt');
 %% Run the simulation
 
 % Solve the path problem using A*
-% [path, num] = astar();
+%[path, num] = astar();
 
 % OR Solve the path problem using RRT
 [path] = rrt(map, start, goal);
