@@ -27,27 +27,30 @@ end
 
 J = zeros(6,joint-1);
 
+% Calculate A matrices
 A0{1} = calcA(0, -pi/2, robot.d1, q(1));
 A0{2} = calcA(robot.a2, 0, 0, q(2)-pi/2);
 A0{3} = calcA(robot.a3, 0, 0, q(3)+pi/2);
 A0{4} = calcA(0, -pi/2, 0, q(4)-pi/2);
 A0{5} = calcA(0, pi/2, robot.d5, q(5)+pi/2);
 A0{6} = calcA(0, 0, robot.d6, 0);
-T{1} = eye(4,4);
 
+% Calculate T matrices
+T0{1} = eye(4,4);
 for i = 1:joint-1
-    T{i+1} = T{i}*A0{i};
+    T0{i+1} = T0{i}*A0{i};
 end
 
+% Handle joint 4 center different from frame center
 if joint == 5
-    T{5} = T{5}*calcA(0, 0, 34, 0);
+    T0{5} = T0{5}*calcA(0, 0, 34, 0);
 end
 
-oe = T{joint}(1:3, 4);
-
+% Calculate J
+oe = T0{joint}(1:3, 4);
 for i = 1: joint-1
-    J(1:3, i) = cross(T{i}(1:3, 3), oe-T{i}(1:3, 4));
-    J(4:6, i) = T{i}(1:3, 3);
+    J(1:3, i) = cross(T0{i}(1:3, 3), oe-T0{i}(1:3, 4));
+    J(4:6, i) = T0{i}(1:3, 3);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
