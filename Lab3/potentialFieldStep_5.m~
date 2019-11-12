@@ -69,11 +69,11 @@ for i = 2:7
     end 
 end 
 
-qNext = qCurr + alpha * (1-0.01*rand) * tauSum/norm(tauSum);
+qNext = qCurr + alpha * tauSum/norm(tauSum);
 %have a limit for each joint, maybe check the workspace location for end effector only, 
 %or have a different limit for each joint
 [jointPositionsNext,~] = calculateFK_sol(qNext, robot);
-if (norm(jointPositionsNext(7,:)-jointPositionsGoal(7,:)) < 3)
+if (norm(jointPositionsNext(7,:)-jointPositionsCurr(7,:)) < 10)
     isDone = 1;
 else 
     isDone = 0;

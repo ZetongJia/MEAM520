@@ -9,9 +9,9 @@ addpath('maps')
 %%%       Modify this part       %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-start = [0,0,0,0,0,0];
-goal = [0,0,1,0,0,0];
-mapToUse = 'map1.txt';
+start = [-1,0,0,0,0,0];
+goal = [1,0,1,0,0,0];
+mapToUse = 'map2.txt';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   Do not modify after this   %%%
@@ -51,16 +51,15 @@ plotmap(map)
 lynxServo(start);
 pause(1);
 
-%% Run the Simulation
+%% Run the SiAmulation
 
 % Initially not done and at start location
 isDone = 0;
 qCurr = start;
-
 % While not finished, take a step
 while ~isDone
     % Calculate the potential field step
-   [qNext, isDone] = potentialFieldStep_groupno(qCurr, map, robot);
+   [qNext, isDone] = potentialFieldStep_5(qCurr, map, robot);
    % Take the step
    lynxServo(qNext);
    qCurr = qNext;
