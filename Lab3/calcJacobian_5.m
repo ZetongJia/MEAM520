@@ -39,6 +39,10 @@ for i = 1:joint-1
     T{i+1} = T{i}*A0{i};
 end
 
+if joint == 5
+    T{5} = T{5}*calcA(0, 0, 34, 0);
+end
+
 oe = T{joint}(1:3, 4);
 
 for i = 1: joint-1
